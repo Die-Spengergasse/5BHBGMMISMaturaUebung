@@ -1,27 +1,115 @@
-# MaturaUebung
+# Angular Kochrezept
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.6.
+Zielsetzung: Daten vom Backend im Frontend anzeigen, bearbeiten und löschen. 
 
-## Development server
+1. Neues Angular-Projekt anlegen
+    - Im Terminal folgenden Befehl eingeben:
+    - `ng new <projektname>`
+    - siehe: https://angular.io/cli/new
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+    - Erste Frage beim Anlegen: `Would you like to add Angular routing? (y/N)`
+        - y: yes
+        - N: No (defaultwert weil großgeschrieben)
+    - Which stylesheet format would you like to use?
+        - css
+    - Nach den beiden Fragen wird ein Order mit dem Namen <projektname> angelegt. In diesem Ordern befinden sich ein git-Repository. In dem dortigen .gitignore wird bereits alles was man sich automatisch generieren kann ignoriert. 
 
-## Code scaffolding
+2. In den Ordner <projektname> im Terminal wechseln
+    - cd <projektname> (ggf. mit Tabulator vervollständigen)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+2.5. Angular material dependency hinzufügen
+     - `ng add @angular/material@13.0.0`
+     - Bei Folgefragen immer den Defaultwert (immer Enter drücken)
 
-## Build
+2.6 die package.json muss folgendermaßen aussehen:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```json
+{
+  "name": "matura-uebung",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^15.2.1",
+    "@angular/cdk": "^15.2.1",
+    "@angular/common": "^15.2.1",
+    "@angular/compiler": "^15.2.1",
+    "@angular/core": "^15.2.1",
+    "@angular/forms": "^15.2.1",
+    "@angular/material": "^15.2.1",
+    "@angular/platform-browser": "^15.2.1",
+    "@angular/platform-browser-dynamic": "^15.2.1",
+    "@angular/router": "^15.2.1",
+    "rxjs": "~7.5.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.1",
+    "@angular/cli": "~15.2.1",
+    "@angular/compiler-cli": "^15.2.1",
+    "@types/jasmine": "~4.0.0",
+    "jasmine-core": "~4.1.0",
+    "karma": "~6.3.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.0.0",
+    "karma-jasmine-html-reporter": "~1.7.0",
+    "typescript": "~4.9.5"
+  }
+}
+```
 
-## Running unit tests
+3. Programm starten
+    - `ng serve`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+4. http://localhost:4200 im Browser aufrufen um zu prüfen ob das Programm lauffähig ist
+    - mit Strg-Klick auf den Link in der Konsole kommt man sofort in den Browser
 
-## Running end-to-end tests
+(4.5). Programm stoppen mit Strg+C in der Konsole
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+(ggf.). Neuen Component hinzufügen
+    - langform: `ng generate component <componentname>`
+    - kurzform: `ng g c <componentname>`
 
-## Further help
+5. Neue Angular Material Address Form Schematic hinzufügen:
+    - `ng generate @angular/material:address-form <component-name>`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+6. Die Schematic ist unter /src/app/<component-name> aufrufbar
+
+7. Programm starten
+
+8. Models basierend auf dem  Backend erstellen
+
+    - http://localhost:8080/api/pracitioner aufrufen. Dazu muss der Backend-Server bereits laufen.
+    - Das dort vorhandene JSON auf json2ts.com einfügen
+    - Neue Datei models.ts erstellen im /src Ordner
+    - default namespace löschen
+    - RootObject in Practitioner umbenennen
+
+9. Data Service hinzufügen
+    - `ng g s Pracitioner`
+
+10. HTTP-Modul hinzufügen
+    - siehe: https://angular.io/guide/http
+    - Im app.module.ts `import { HttpClientModule } from '@angular/common/http';`
+    - Das Module bei den Imports dazugeben
+
+11. Im Data service den HttpClient dazugeben im Konstruktor
+    - `constructor(private http: HttpClient) {...}`
+
+12. Methode zum abfragen aller Practitioner hinzufügen
+    - dazu die Adresse in welcher alle Practitioner im Backend sind holen
+
+13. AddressForm Schemaitc an Pracitioner anpassen
+    - states rauslöschen
+    - onSubmit löschen
+    - addressForm in practitionerForm umbenennen
+    - JSON vom server reinkopieren und dann im form builder umsetzen
+    
