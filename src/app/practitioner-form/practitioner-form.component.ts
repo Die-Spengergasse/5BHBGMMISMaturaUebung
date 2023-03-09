@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
+import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { PracitionerService } from '../pracitioner.service';
+import {ActivatedRoute} from "@angular/router";
 
 
 /*
@@ -126,12 +129,27 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
   templateUrl: './practitioner-form.component.html',
   styleUrls: ['./practitioner-form.component.css']
 })
-export class PractitionerFormComponent {
-  createIdentifierFormGroup(): FormGroup {
+export class PractitionerFormComponent implements OnInit {
+
+  public createPeriodFormGroup(): FormGroup{
     return new FormGroup({
-      
+      start: new FormControl<Date>(new Date()),
+      end: new FormControl<Date>(new Date())
     });
   }
+
+  public createIdentifierFormGroup(): FormGroup {
+    return new FormGroup({
+      id: new FormControl<string>(""),
+      use: new FormControl<string>(""),
+      type: new FormControl<string>(""),
+      system: new FormControl<string>(""),
+      value: new FormControl<string>(""),
+      period: this.createPeriodFormGroup(),
+      assigner: new FormControl<string>(""),
+    });
+  }
+
   practitionerForm = this.fb.group({
     id: new FormControl<string>(""),
     text: new FormControl<string>(""),
@@ -147,5 +165,18 @@ export class PractitionerFormComponent {
   });
 
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private ps: PracitionerService, private route: ActivatedRoute) {}
+
+  // wird ausgeführt wenn der Component geladen wird
+  ngOnInit() {
+    // fragt alle parameter in der URL ab, wird bei einer Änderung ausgeführt
+    this.route.params.subscribe(params => {
+    
+      // fragt paracitioner-daten basierden auf der übergebenen ID ab
+      this.ps.getPracitionerById(params["id"]).subscribe(practitioner => {
+        this.practitionerForm.patchValue(practitioner as any);
+      })
+
+    });
+  }
 }

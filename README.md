@@ -113,3 +113,27 @@ Zielsetzung: Daten vom Backend im Frontend anzeigen, bearbeiten und löschen.
     - addressForm in practitionerForm umbenennen
     - JSON vom server reinkopieren und dann im form builder umsetzen
     
+14. Aufbau der FormGroup im ts- teil
+    - JSON vom Server soll als FormGroup vorliegen
+    - In dem JSON gibt es Werte, Objekte und Listen
+        - Listen im JSON [] werden als `new FormArray([...])` dargestellt
+        - Objekte im JSON {} werden als `new FormGroup({...})` dargestellt
+        - Werte im JSON ("", null, 0, true) werden als `new FormControl<string>("...")` dargestellt
+        - Ausnahme: Date, diese Javascript-Klasse kann direkt als Wert dargestellt werden, bei anderen Klassen können nur einzelen
+        properties geändert werden. 
+
+15. Aufbau der FormGroup im html-teil
+    - alles rauslöschen
+    - *ng-for hinzufügen in `<span>` also z.B `let identifier of practitiionierForm.controls.identifier.controls`
+    - `[fromGroup]="identifier"` in `<span>` hinzufügen
+    - Im ngOnInit die ID der Route abfragen, siehe [hier](https://angular.io/guide/router)
+    -  
+
+    
+16. Routen definieren
+    - Man geht in `app.routing.module.ts`
+    - Zugriff via app.module.ts in den imports
+    - In dem Array Routes muss man ein Route-Objekt hinzufügen mit folgenden Werten
+        - {"path": "/pracitioner/:id", component: PractitionerFormComponent}
+    
+    
